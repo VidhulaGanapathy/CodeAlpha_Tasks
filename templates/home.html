@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form method="post" class="card">
+  {% csrf_token %}
+  <h3>Hi, {{ user.username }} 👋</h3>
+  <textarea name="content" id="post-content" rows="3" maxlength="280" placeholder="What's on your mind?" required></textarea>
+  <div class="compose-foot">
+    <span id="char-count">0/280</span>
+    <button class="btn">🚀 Post</button>
+  </div>
+</form>
+
+<div class="card">
+  <h3>👥 People</h3>
+  {% for u in people %}
+    <div class="person">
+      <span class="avatar" data-name="{{ u.username }}">{{ u.username|first|upper }}</span>
+      <a class="name" href="{% url 'profile' u.username %}">@{{ u.username }}</a>
+      <form method="post" action="{% url 'follow' u.username %}" class="inline">
+        {% csrf_token %}
+        {% if u.id in following_ids %}
+          <button class="btn-unfollow">Unfollow</button>
+        {% else %}
+          <button class="btn-follow">+ Follow</button>
+        {% endif %}
+      </form>
+    </div>
+  {% empty %}
+    <p class="empty">No other users yet. Sign up a second account to test following.</p>
+  {% endfor %}
+</div>
+
+<div class="tabs">
+  <a href="{% url 'home' %}" class="{% if request.GET.filter != 'following' %}active{% endif %}">🌍 All posts</a>
+  <a href="{% url 'home' %}?filter=following" class="{% if request.GET.filter == 'following' %}active{% endif %}">⭐ Following</a>
+</div>
+
+{% for post in posts %}
+  {% include '_post.html' %}
+{% empty %}
+  <div class="card empty">
+    {% if request.GET.filter == 'following' %}
+      📭 No posts here. Follow people who have posted to see their posts in this tab.
+    {% else %}
+      📝 No posts yet. Be the first to post!
+    {% endif %}
+  </div>
+{% endfor %}
+
+{% endblock %}

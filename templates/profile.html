@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<a href="{% url 'home' %}" class="back-link">← Back to Home</a>
+
+<div class="card profile-card">
+  <div class="banner"></div>
+  <div class="profile-body">
+    <span class="avatar big" data-name="{{ owner.username }}">{{ owner.username|first|upper }}</span>
+    <h2>@{{ owner.username }}</h2>
+    <p class="bio">{{ profile.bio|default:"No bio yet." }}</p>
+
+    <div class="stats">
+      <div><b>{{ posts.count }}</b><span>Posts</span></div>
+      <a href="{% url 'followers' owner.username %}"><b>{{ followers_count }}</b><span>Followers</span></a>
+      <a href="{% url 'following' owner.username %}"><b>{{ following_count }}</b><span>Following</span></a>
+    </div>
+
+    {% if owner == request.user %}
+      <a href="{% url 'edit_profile' %}"><button class="btn">✏️ Edit profile</button></a>
+    {% else %}
+      <form method="post" action="{% url 'follow' owner.username %}">
+        {% csrf_token %}
+        {% if is_following %}
+          <button class="btn-unfollow">Unfollow</button>
+        {% else %}
+          <button class="btn-follow">+ Follow</button>
+        {% endif %}
+      </form>
+    {% endif %}
+  </div>
+</div>
+
+{% for post in posts %}
+  {% include '_post.html' %}
+{% empty %}
+  <div class="card empty">📝 No posts yet.</div>
+{% endfor %}
+{% endblock %}

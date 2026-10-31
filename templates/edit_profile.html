@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<a href="{% url 'profile' user.username %}" class="back-link">← Back to profile</a>
+<form method="post" class="card">
+  {% csrf_token %}
+  <h3>✏️ Edit profile</h3>
+  <textarea name="bio" rows="3" maxlength="160" placeholder="Write your bio...">{{ profile.bio }}</textarea>
+  <div class="compose-foot">
+    <span></span>
+    <button class="btn">Save</button>
+  </div>
+</form>
+{% endblock %}

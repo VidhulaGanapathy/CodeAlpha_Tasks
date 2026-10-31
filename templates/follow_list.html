@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<a href="{% url 'profile' owner.username %}" class="back-link">← Back to profile</a>
+
+<div class="card">
+  <h3>@{{ owner.username }}'s {{ kind }}</h3>
+  {% for u in users %}
+    <div class="person">
+      <span class="avatar" data-name="{{ u.username }}">{{ u.username|first|upper }}</span>
+      <a class="name" href="{% url 'profile' u.username %}">@{{ u.username }}</a>
+    </div>
+  {% empty %}
+    <p class="empty">No {{ kind }} yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}
