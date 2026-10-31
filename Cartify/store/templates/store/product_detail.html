@@ -1,0 +1,72 @@
+{% extends 'store/base.html' %}
+{% block content %}
+
+<a href="{% url 'home' %}" class="back-link">← Back to products</a>
+
+<div class="detail">
+
+  <div class="zoom-frame" id="zoom-frame">
+    <img src="{{ product.image_url }}" alt="{{ product.name }}" id="zoom-image" draggable="false">
+  </div>
+
+  <div class="detail-info">
+    <h1>{{ product.name }}</h1>
+    <p class="detail-price">₹{{ product.price }}</p>
+    <p class="detail-desc">{{ product.description }}</p>
+    <a href="{% url 'add_to_cart' product.id %}" class="btn btn-big">Add to Cart</a>
+  </div>
+
+</div>
+
+<script>
+  const frame = document.getElementById('zoom-frame');
+  const image = document.getElementById('zoom-image');
+
+  const MIN_ZOOM = 0.5;
+  const MAX_ZOOM = 4;
+  const STEP = 0.25;
+  let zoom = 1;
+
+  function render() {
+    zoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, zoom));
+    zoom = Math.round(zoom * 100) / 100;
+    image.style.transform = 'scale(' + zoom + ')';
+    frame.classList.toggle('zoomed', zoom > 1);
+    if (zoom === 1) {
+      image.style.transformOrigin = '50% 50%';
+    }
+  }
+
+  function moveOrigin(event) {
+    const box = frame.getBoundingClientRect();
+    const x = (event.clientX - box.left) / box.width * 100;
+    const y = (event.clientY - box.top) / box.height * 100;
+    image.style.transformOrigin = x + '% ' + y + '%';
+  }
+
+  frame.addEventListener('wheel', function (event) {
+    event.preventDefault();
+    moveOrigin(event);
+    zoom = zoom + (event.deltaY < 0 ? STEP : -STEP);
+    render();
+  }, { passive: false });
+
+  frame.addEventListener('mousemove', function (event) {
+    if (zoom > 1) {
+      moveOrigin(event);
+    }
+  });
+
+  frame.addEventListener('click', function (event) {
+    moveOrigin(event);
+    zoom = zoom > 1 ? 1 : 2;
+    render();
+  });
+
+  frame.addEventListener('mouseleave', function () {
+    zoom = 1;
+    render();
+  });
+</script>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'store/base.html' %}
+{% block content %}
+
+<div class="page-banner">
+  <div>
+    <h1>Hi, {{ user.username }}</h1>
+    <p>Find something you'll love today.</p>
+  </div>
+  <input type="text" id="search-box" class="search-box" placeholder="Search products" autocomplete="off">
+</div>
+
+<div class="grid">
+  {% for product in products %}
+  <div class="card" data-name="{{ product.name|lower }}">
+
+    <a href="{% url 'product_detail' product.id %}" class="card-img">
+      <img src="{{ product.image_url }}" alt="{{ product.name }}" loading="lazy">
+    </a>
+
+    <div class="card-body">
+      <h3 class="card-title">{{ product.name }}</h3>
+      <p class="card-desc">{{ product.description|truncatewords:10 }}</p>
+      <p class="card-price">₹{{ product.price }}</p>
+      <div class="card-actions">
+        <a href="{% url 'product_detail' product.id %}" class="btn btn-light">View Details</a>
+        <a href="{% url 'add_to_cart' product.id %}" class="btn">Add to Cart</a>
+      </div>
+    </div>
+
+  </div>
+  {% empty %}
+  <p>No products yet. Add some from the admin panel.</p>
+  {% endfor %}
+</div>
+
+<p id="no-results" class="no-results">No products match your search.</p>
+
+{% endblock %}

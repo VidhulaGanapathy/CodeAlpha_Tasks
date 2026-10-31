@@ -1,0 +1,12 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<div class="auth-box">
+  <h2>Login to Cartify</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-full">Login</button>
+  </form>
+  <p class="auth-switch">New here? <a href="{% url 'register' %}">Create an account</a></p>
+</div>
+{% endblock %}

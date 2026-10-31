@@ -1,0 +1,37 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<h1>Checkout</h1>
+
+<div class="checkout-layout">
+
+  <div class="checkout-box">
+    <h2>Delivery Details</h2>
+    <form method="post" id="checkout-form">
+      {% csrf_token %}
+      <label for="address">Delivery Address</label>
+      <textarea name="address" id="address" rows="5" placeholder="House no, street, city, pincode"></textarea>
+      <button type="submit" class="btn btn-full">Place Order · ₹{{ total }}</button>
+    </form>
+  </div>
+
+  <div class="checkout-box">
+    <h2>Order Summary</h2>
+    {% for item in items %}
+    <div class="summary-item">
+      <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
+      <div class="summary-info">
+        <p class="summary-name">{{ item.product.name }}</p>
+        <p class="summary-qty">Qty: {{ item.quantity }} × ₹{{ item.product.price }}</p>
+      </div>
+      <p class="summary-price">₹{{ item.subtotal }}</p>
+    </div>
+    {% endfor %}
+
+    <div class="summary-total">
+      <span>Total</span>
+      <span>₹{{ total }}</span>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

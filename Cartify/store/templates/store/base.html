@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cartify</title>
+  <link rel="icon" href="{% static 'store/images/favicon.png' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'store/style.css' %}">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-inner">
+
+      <a href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'landing' %}{% endif %}" class="brand">
+        <img src="{% static 'store/images/logo-icon.png' %}" alt="Cartify logo">
+        <span><span class="brand-cart">Cart</span><span class="brand-ify">ify</span></span>
+      </a>
+
+      <nav class="nav-links">
+        {% if user.is_authenticated %}
+          <a href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}class="active"{% endif %}>Shop</a>
+          <a href="{% url 'cart' %}" {% if request.resolver_match.url_name == 'cart' %}class="active"{% endif %}>Cart</a>
+          <a href="{% url 'my_orders' %}" {% if request.resolver_match.url_name == 'my_orders' %}class="active"{% endif %}>My Orders</a>
+          <form method="post" action="{% url 'logout' %}" class="inline">
+            {% csrf_token %}
+            <button type="submit">Logout ({{ user.username }})</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}">Login</a>
+          <a href="{% url 'register' %}" class="nav-cta">Register</a>
+        {% endif %}
+      </nav>
+
+    </div>
+  </header>
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    © {% now "Y" %} Cartify. Built with Django.
+  </footer>
+
+  <script src="{% static 'store/script.js' %}"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<h1>Your Cart</h1>
+
+{% if items %}
+<div class="cart-layout">
+
+  <div class="checkout-box">
+    <h2>Items in your cart</h2>
+    {% for item in items %}
+    <div class="cart-item">
+      <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
+
+      <div class="cart-info">
+        <p class="summary-name">{{ item.product.name }}</p>
+        <p class="summary-qty">₹{{ item.product.price }} each</p>
+        <a href="{% url 'remove_from_cart' item.product.id %}" class="remove-link confirm-delete">Remove</a>
+      </div>
+
+      <div class="qty-box">
+        <a href="{% url 'decrease_cart' item.product.id %}" class="qty-btn">−</a>
+        <span class="qty-number">{{ item.quantity }}</span>
+        <a href="{% url 'add_to_cart' item.product.id %}" class="qty-btn">+</a>
+      </div>
+
+      <p class="summary-price">₹{{ item.subtotal }}</p>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="checkout-box">
+    <h2>Price Details</h2>
+    <div class="price-row"><span>Items</span><span>{{ items|length }}</span></div>
+    <div class="summary-total"><span>Total</span><span>₹{{ total }}</span></div>
+    <a href="{% url 'checkout' %}" class="btn btn-full center">Proceed to Checkout</a>
+    <a href="{% url 'home' %}" class="continue-link">← Continue shopping</a>
+  </div>
+
+</div>
+
+{% else %}
+<div class="checkout-box empty-box">
+  <h2>Your cart is empty</h2>
+  <p>Looks like you haven't added anything yet.</p>
+  <a href="{% url 'home' %}" class="btn">Shop now</a>
+</div>
+{% endif %}
+{% endblock %}

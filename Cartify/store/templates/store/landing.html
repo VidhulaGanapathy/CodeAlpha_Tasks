@@ -1,0 +1,32 @@
+{% extends 'store/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="landing-hero">
+  <img src="{% static 'store/images/logo-full.png' %}" alt="Cartify" class="landing-logo">
+  <p>Everything you need, in one cart.</p>
+  <div class="landing-buttons">
+    <a href="{% url 'login' %}" class="btn">Login</a>
+    <a href="{% url 'register' %}" class="btn btn-outline">Create account</a>
+  </div>
+</section>
+
+<div class="feature-grid">
+  <div class="feature-card">
+    <div class="feature-icon">🛍️</div>
+    <h3>Wide range</h3>
+    <p>Electronics, fashion, home, fitness and more, all in one place.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">🛒</div>
+    <h3>Easy cart</h3>
+    <p>Add items, change quantities and check out in a few clicks.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon">📦</div>
+    <h3>Your orders</h3>
+    <p>See everything you have ordered on one page.</p>
+  </div>
+</div>
+
+{% endblock %}

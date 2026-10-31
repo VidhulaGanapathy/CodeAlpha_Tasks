@@ -1,0 +1,36 @@
+{% extends 'store/base.html' %}
+{% block content %}
+<h1>My Orders</h1>
+
+{% for order in orders %}
+<div class="order-card">
+
+  <div class="order-header">
+    <div>
+      <p class="order-title">Order #{{ forloop.revcounter }}</p>
+      <p class="summary-qty">Placed on {{ order.created_at|date:"d M Y, h:i A" }}</p>
+    </div>
+    <div class="order-total">₹{{ order.total }}</div>
+  </div>
+
+  {% for item in order.items.all %}
+  <div class="summary-item">
+    <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}">
+    <div class="summary-info">
+      <p class="summary-name">{{ item.product.name }}</p>
+      <p class="summary-qty">Qty: {{ item.quantity }} × ₹{{ item.price }}</p>
+    </div>
+  </div>
+  {% endfor %}
+
+  <p class="order-address"><b>Delivering to:</b> {{ order.address }}</p>
+</div>
+
+{% empty %}
+<div class="checkout-box empty-box">
+  <h2>No orders yet</h2>
+  <p>When you place an order, it will appear here.</p>
+  <a href="{% url 'home' %}" class="btn">Start shopping</a>
+</div>
+{% endfor %}
+{% endblock %}
