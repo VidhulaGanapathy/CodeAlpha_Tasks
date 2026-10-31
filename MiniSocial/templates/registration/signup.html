@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card auth">
+  <h2>🚀 Join MiniSocial</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn">Create account</button>
+  </form>
+  <p class="switch">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+</div>
+{% endblock %}
